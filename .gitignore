@@ -2,6 +2,9 @@
 PLAN.md
 .github/copilot-instructions.md
 
+# Local development settings (credentials)
+**/appsettings.Development.json
+
 # Build results
 [Dd]ebug/
 [Rr]elease/
