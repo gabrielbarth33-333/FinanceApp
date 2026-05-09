@@ -92,22 +92,72 @@ A API estará disponível em `https://localhost:5001` com documentação OpenAPI
 
 ---
 
+## Funcionalidades principais
+
+### Sanitização de documentos (CPF/CNPJ)
+
+- **Document value object** imutável que sanitiza automaticamente máscaras na construção
+- Remove tudo que não é alfanumérico: `"123.456.789-00"` → `"12345678900"`
+- Validação em nível de domínio via `DomainException`
+- Aplicado em todos os use cases: criar conta, buscar conta, registrar transação, listar transações
+
+**Exemplos:**
+```
+Entrada: "123.456.789-00" → Armazenado: "12345678900"
+Entrada: "12.345.678/0001-90" → Armazenado: "12345678000190"
+Busca por "123.456.789-00" encontra documento armazenado como "12345678900" ✓
+```
+
+### Busca de categorias — case e diacrítico-insensível
+
+- PostgreSQL `unaccent()` + `LOWER()` para ignorar case e acentuação
+- Exemplo: `"alimentacao"`, `"ALIMENTAÇÃO"`, `"Alimentação"` → todos encontram categoria `"Alimentação"`
+- Query segura com `FromSqlInterpolated` (previne SQL injection)
+
+**Exemplos:**
+```
+Entrada: "alimentacao" → Encontra: "Alimentação" ✓
+Entrada: "OUTROS" → Encontra: "Outros" ✓
+Entrada: "Saúde" → Encontra: "Saúde" ✓
+```
+
+---
+
 ## Endpoints
 
 ### Contas
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
-| `POST` | `/api/accounts` | Cria uma nova conta |
+| `POST` | `/api/accounts` | Cria uma nova conta (aceita documento com máscara) |
 | `GET` | `/api/accounts/{id}` | Busca conta por ID |
-| `GET` | `/api/accounts/document/{document}` | Busca conta por CPF/CNPJ |
+| `GET` | `/api/accounts/document/{document}` | Busca conta por CPF/CNPJ (aceita com máscara) |
+
+**Exemplo POST `/api/accounts`:**
+```json
+{
+  "name": "João Silva",
+  "document": "123.456.789-00",
+  "initialBalance": 5000.00
+}
+```
 
 ### Transações
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
-| `POST` | `/api/transactions` | Registra uma transação |
+| `POST` | `/api/transactions` | Registra uma transação (aceita categoria com case/acento diferente) |
 | `GET` | `/api/transactions/{document}` | Lista transações por documento com balanço do período |
+
+**Exemplo POST `/api/transactions`:**
+```json
+{
+  "document": "123.456.789-00",
+  "amount": 150.00,
+  "type": "Expense",
+  "categoryName": "alimentacao"
+}
+```
 
 #### Query params — GET `/api/transactions/{document}`
 
@@ -137,9 +187,11 @@ A API estará disponível em `https://localhost:5001` com documentação OpenAPI
 dotnet test
 ```
 
-- **30 testes** — 18 de domínio + 12 de aplicação
+- **47 testes** — 30 de domínio + 17 de aplicação
+- Cobertura: **87.8%** (Domain: 94.6%, Application: 94.7%)
 - Nomenclatura em português: `Deve[Resultado]_Quando[Condição]`
 - Framework: xUnit + Moq + FluentAssertions
+- Testes para sanitização de documento e busca case-insensitiva de categorias incluídos
 
 ---
 
