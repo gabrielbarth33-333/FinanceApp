@@ -14,7 +14,7 @@ namespace FinanceApp.Api.Controllers;
 public class TransactionQueryController(ListTransactionsUseCase listUseCase) : ControllerBase
 {
     /// <summary> Lista as transações de uma conta pelo documento (CPF/CNPJ), com filtragem opcional por período. Quando não informado, aplica o último mês. Retorna o balance do período. </summary>
-    [HttpGet("document/{document}")]
+    [HttpGet("{document}")]
     public async Task<IActionResult> ListByDocument(
         string document,
         [FromQuery] DateTime? startDate = null,

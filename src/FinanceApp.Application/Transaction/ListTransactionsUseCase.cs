@@ -18,8 +18,9 @@ public class ListTransactionsUseCase(
             ?? throw new AccountException($"Conta com documento '{document}' não encontrada.");
 
         // Trunca para data (sem hora) e aplica padrão de 1 mês quando não informado
-        var start = (startDate?.Date ?? DateTime.UtcNow.Date.AddMonths(-1));
-        var end = (endDate?.Date ?? DateTime.UtcNow.Date).AddDays(1).AddTicks(-1);
+        // DateTime.SpecifyKind garante Kind=Utc exigido pelo Npgsql em colunas timestamptz
+        var start = DateTime.SpecifyKind(startDate?.Date ?? DateTime.UtcNow.Date.AddMonths(-1), DateTimeKind.Utc);
+        var end = DateTime.SpecifyKind((endDate?.Date ?? DateTime.UtcNow.Date).AddDays(1).AddTicks(-1), DateTimeKind.Utc);
 
         var transactions = await transactionRepository.ListByAccountIdAndPeriod(account.Id, start, end);
 
