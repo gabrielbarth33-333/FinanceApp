@@ -1,0 +1,13 @@
+<Project>
+  <!-- Exclusões globais de cobertura de código:
+       - Infrastructure: repositórios EF Core, migrations e configurações (cobertos por integration tests)
+       - Migrations: código gerado automaticamente pelo EF Core
+       - Api: controllers, middlewares e Program.cs (cobertos por testes E2E)
+  -->
+  <PropertyGroup>
+    <CollectCoverage>true</CollectCoverage>
+    <CoverletOutputFormat>cobertura</CoverletOutputFormat>
+    <ExcludeByFile>**/Migrations/**/*.cs</ExcludeByFile>
+    <Exclude>[FinanceApp.Infrastructure]*,[FinanceApp.Api]*</Exclude>
+  </PropertyGroup>
+</Project>
