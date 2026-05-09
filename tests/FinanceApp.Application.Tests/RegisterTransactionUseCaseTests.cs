@@ -44,7 +44,7 @@ public class RegisterTransactionUseCaseTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        var account = new AccountEntity(accountId, "João", Document, new Money(1000m));
+        var account = new AccountEntity(accountId, "João", new Document(Document), new Money(1000m));
         var categoryRef = new CategoryRef(Guid.NewGuid(), "Alimentação");
 
         _accountRepoMock.Setup(r => r.GetByDocument(Document)).ReturnsAsync(account);
@@ -82,7 +82,7 @@ public class RegisterTransactionUseCaseTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        var account = new AccountEntity(accountId, "João", Document, new Money(50m));
+        var account = new AccountEntity(accountId, "João", new Document(Document), new Money(50m));
         var categoryRef = new CategoryRef(Guid.NewGuid(), "Alimentação");
 
         _accountRepoMock.Setup(r => r.GetByDocument(Document)).ReturnsAsync(account);
@@ -103,7 +103,7 @@ public class RegisterTransactionUseCaseTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        var account = new AccountEntity(accountId, "João", Document, new Money(1000m));
+        var account = new AccountEntity(accountId, "João", new Document(Document), new Money(1000m));
 
         _accountRepoMock.Setup(r => r.GetByDocument(Document)).ReturnsAsync(account);
         _categoryAclMock.Setup(a => a.GetCategory("Inexistente"))
@@ -122,7 +122,7 @@ public class RegisterTransactionUseCaseTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        var account = new AccountEntity(accountId, "João", Document, new Money(1000m));
+        var account = new AccountEntity(accountId, "João", new Document(Document), new Money(1000m));
         var categoryRef = new CategoryRef(Guid.NewGuid(), "Alimentação");
         TransactionEntity? capturedTransaction = null;
 

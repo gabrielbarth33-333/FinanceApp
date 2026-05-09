@@ -25,7 +25,7 @@ public class GetAccountUseCaseTests
     {
         // Arrange
         var id = Guid.NewGuid();
-        var account = new AccountEntity(id, "Ana", "12345678900", new Money(500m));
+        var account = new AccountEntity(id, "Ana", new Document("12345678900"), new Money(500m));
         _repoMock.Setup(r => r.GetById(id)).ReturnsAsync(account);
 
         // Act

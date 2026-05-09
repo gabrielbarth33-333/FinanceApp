@@ -33,9 +33,12 @@ public class RegisterTransactionUseCase(
         string categoryName,
         DateTime? date = null)
     {
+        // [GRASP: Protected Variations] — Sanitiza documento aqui no use case
+        var sanitizedDoc = new Document(document);
+        
         // Resolve documento → conta (usuário nunca lida com Guid)
-        var account = await accountRepository.GetByDocument(document)
-            ?? throw new AccountException($"Conta com documento '{document}' não encontrada.");
+        var account = await accountRepository.GetByDocument(sanitizedDoc.Value)
+            ?? throw new AccountException($"Conta com documento '{sanitizedDoc.Value}' não encontrada.");
 
         var money = new Money(amount);
         var transactionDate = date ?? DateTime.UtcNow;

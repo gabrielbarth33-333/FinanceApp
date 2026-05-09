@@ -10,7 +10,7 @@ namespace FinanceApp.Domain.Tests;
 public class AccountTests
 {
     private static AccountEntity CreateAccount(decimal balance = 1000m) =>
-        new(Guid.NewGuid(), "João Silva", "12345678900", new Money(balance));
+        new(Guid.NewGuid(), "João Silva", new Document("12345678900"), new Money(balance));
 
     [Fact]
     public void DeveAtualizarSaldo_QuandoTransacaoDeReceitaForRegistrada()
@@ -76,7 +76,7 @@ public class AccountTests
     public void DeveLancarAccountException_QuandoIdForVazio()
     {
         // Arrange & Act
-        var act = () => new AccountEntity(Guid.Empty, "João", "12345678900", new Money(100m));
+        var act = () => new AccountEntity(Guid.Empty, "João", new Document("12345678900"), new Money(100m));
 
         // Assert
         act.Should().Throw<AccountException>();

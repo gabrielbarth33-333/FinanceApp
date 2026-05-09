@@ -13,7 +13,7 @@ public class Account
     public string Document { get; private set; }
     public Money Balance { get; private set; }
 
-    public Account(Guid id, string name, string document, Money balance)
+    public Account(Guid id, string name, Document document, Money balance)
     {
         if (id == Guid.Empty)
             throw new AccountException("Id da conta inválido.");
@@ -21,12 +21,12 @@ public class Account
         if (string.IsNullOrWhiteSpace(name))
             throw new AccountException("Nome é obrigatório.");
 
-        if (string.IsNullOrWhiteSpace(document))
+        if (document?.Value == null)
             throw new AccountException("Documento é obrigatório.");
 
         Id = id;
         Name = name;
-        Document = document;
+        Document = document.Value; // Extrai o valor sanitizado do value object
         Balance = balance;
     }
 

@@ -39,7 +39,7 @@ public class CreateAccountUseCaseTests
     public async Task DeveLancarExcecao_QuandoDocumentoJaExistir()
     {
         // Arrange
-        var existingAccount = new AccountEntity(Guid.NewGuid(), "João", "12345678900", new Money(100m));
+        var existingAccount = new AccountEntity(Guid.NewGuid(), "João", new Document("12345678900"), new Money(100m));
         _accountRepoMock.Setup(r => r.GetByDocument("12345678900")).ReturnsAsync(existingAccount);
 
         // Act

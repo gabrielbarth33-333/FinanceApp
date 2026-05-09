@@ -24,7 +24,7 @@ public class TransactionDomainServiceTests
     {
         // Arrange
         var id = Guid.NewGuid();
-        var account = new AccountEntity(id, "João", "12345678900", new Money(500m));
+        var account = new AccountEntity(id, "João", new Document("12345678900"), new Money(500m));
         _repoMock.Setup(r => r.GetById(id)).ReturnsAsync(account);
 
         // Act
@@ -54,7 +54,7 @@ public class TransactionDomainServiceTests
     {
         // Arrange
         var id = Guid.NewGuid();
-        var account = new AccountEntity(id, "Maria", "11122233344", new Money(50m));
+        var account = new AccountEntity(id, "Maria", new Document("11122233344"), new Money(50m));
         _repoMock.Setup(r => r.GetById(id)).ReturnsAsync(account);
 
         // Act

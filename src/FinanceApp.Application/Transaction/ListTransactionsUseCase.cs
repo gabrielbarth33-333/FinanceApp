@@ -1,6 +1,7 @@
 using FinanceApp.Domain.Account;
 using FinanceApp.Domain.Exceptions;
 using FinanceApp.Domain.Transaction;
+using FinanceApp.Domain.ValueObjects;
 
 namespace FinanceApp.Application.Transaction;
 
@@ -14,8 +15,11 @@ public class ListTransactionsUseCase(
         DateTime? startDate = null,
         DateTime? endDate = null)
     {
-        var account = await accountRepository.GetByDocument(document)
-            ?? throw new AccountException($"Conta com documento '{document}' não encontrada.");
+        // [GRASP: Protected Variations] — Sanitiza documento aqui no use case
+        var sanitizedDoc = new Document(document);
+        
+        var account = await accountRepository.GetByDocument(sanitizedDoc.Value)
+            ?? throw new AccountException($"Conta com documento '{sanitizedDoc.Value}' não encontrada.");
 
         // Trunca para data (sem hora) e aplica padrão de 1 mês quando não informado
         // DateTime.SpecifyKind garante Kind=Utc exigido pelo Npgsql em colunas timestamptz

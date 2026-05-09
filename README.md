@@ -109,8 +109,6 @@ A API estará disponível em `https://localhost:5001` com documentação OpenAPI
 | `POST` | `/api/transactions` | Registra uma transação |
 | `GET` | `/api/transactions/{document}` | Lista transações por documento com balanço do período |
 
-> Os endpoints de transação usam o **documento (CPF/CNPJ)** em vez do ID da conta — o sistema resolve o ID internamente.
-
 #### Query params — GET `/api/transactions/{document}`
 
 | Parâmetro | Tipo | Descrição |

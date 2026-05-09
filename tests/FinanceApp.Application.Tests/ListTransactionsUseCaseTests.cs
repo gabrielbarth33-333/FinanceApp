@@ -31,7 +31,7 @@ public class ListTransactionsUseCaseTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        var account = new AccountEntity(accountId, "João", Document, new Money(500m));
+        var account = new AccountEntity(accountId, "João", new Document(Document), new Money(500m));
         var categoryRef = new CategoryRef(Guid.NewGuid(), "Salário");
 
         var transactions = new List<TransactionEntity>
@@ -61,7 +61,7 @@ public class ListTransactionsUseCaseTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        var account = new AccountEntity(accountId, "João", Document, new Money(100m));
+        var account = new AccountEntity(accountId, "João", new Document(Document), new Money(100m));
         var expectedStart = DateTime.UtcNow.Date.AddMonths(-1);
 
         _accountRepoMock.Setup(r => r.GetByDocument(Document)).ReturnsAsync(account);
@@ -82,7 +82,7 @@ public class ListTransactionsUseCaseTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        var account = new AccountEntity(accountId, "João", Document, new Money(100m));
+        var account = new AccountEntity(accountId, "João", new Document(Document), new Money(100m));
         var startWithTime = new DateTime(2024, 1, 10, 15, 30, 0);
         var endWithTime = new DateTime(2024, 2, 10, 23, 59, 59);
 
@@ -121,7 +121,7 @@ public class ListTransactionsUseCaseTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        var account = new AccountEntity(accountId, "João", Document, new Money(100m));
+        var account = new AccountEntity(accountId, "João", new Document(Document), new Money(100m));
 
         _accountRepoMock.Setup(r => r.GetByDocument(Document)).ReturnsAsync(account);
         _transactionRepoMock

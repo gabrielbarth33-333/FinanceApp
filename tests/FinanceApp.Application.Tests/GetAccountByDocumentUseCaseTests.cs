@@ -24,7 +24,7 @@ public class GetAccountByDocumentUseCaseTests
     {
         // Arrange
         const string document = "98765432100";
-        var account = new AccountEntity(Guid.NewGuid(), "Carlos", document, new Money(200m));
+        var account = new AccountEntity(Guid.NewGuid(), "Carlos", new Document(document), new Money(200m));
         _repoMock.Setup(r => r.GetByDocument(document)).ReturnsAsync(account);
 
         // Act
