@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FinanceApp.Api/FinanceApp.Api.csproj" />
+    <Project Path="src/FinanceApp.Application/FinanceApp.Application.csproj" />
+    <Project Path="src/FinanceApp.Catalog/FinanceApp.Catalog.csproj" />
+    <Project Path="src/FinanceApp.Domain/FinanceApp.Domain.csproj" />
+    <Project Path="src/FinanceApp.Infrastructure/FinanceApp.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FinanceApp.Application.Tests/FinanceApp.Application.Tests.csproj" />
+    <Project Path="tests/FinanceApp.Domain.Tests/FinanceApp.Domain.Tests.csproj" />
+    <Project Path="tests/FinanceApp.Infrastructure.Tests/FinanceApp.Infrastructure.Tests.csproj" />
+  </Folder>
+</Solution>
