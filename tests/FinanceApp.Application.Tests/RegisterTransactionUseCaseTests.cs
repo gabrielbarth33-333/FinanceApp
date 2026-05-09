@@ -142,4 +142,29 @@ public class RegisterTransactionUseCaseTests
         // Assert
         capturedTransaction!.Date.Should().BeOnOrAfter(before).And.BeOnOrBefore(DateTime.UtcNow);
     }
+
+    [Fact]
+    public async Task DeveEncontrarCategoria_QuandoNomeTiverCaseEAcentoDiferente()
+    {
+        // Arrange — Category no banco é "Alimentação", mas cliente envia "alimentacao"
+        var accountId = Guid.NewGuid();
+        var account = new AccountEntity(accountId, "João", new Document(Document), new Money(1000m));
+        var categoryRef = new CategoryRef(Guid.NewGuid(), "Alimentação");
+
+        _accountRepoMock.Setup(r => r.GetByDocument(Document)).ReturnsAsync(account);
+        // Repository busca ignorando case/acento, então "alimentacao" encontra "Alimentação"
+        _categoryAclMock.Setup(a => a.GetCategory("alimentacao")).ReturnsAsync(categoryRef);
+        _transactionRepoMock.Setup(r => r.Add(It.IsAny<TransactionEntity>())).Returns(Task.CompletedTask);
+        _accountRepoMock.Setup(r => r.Save(It.IsAny<AccountEntity>())).Returns(Task.CompletedTask);
+        _domainServiceMock.Setup(d => d.ValidateBalance(accountId, It.IsAny<Money>())).Returns(Task.CompletedTask);
+
+        // Act — envia "alimentacao" (sem acento, lowercase)
+        await _useCase.ExecuteAsync(Document, 100m, TransactionType.Expense, "alimentacao", date: null);
+
+        // Assert
+        _categoryAclMock.Verify(a => a.GetCategory("alimentacao"), Times.Once);
+        _transactionRepoMock.Verify(r => r.Add(It.IsAny<TransactionEntity>()), Times.Once);
+        _accountRepoMock.Verify(r => r.Save(It.IsAny<AccountEntity>()), Times.Once);
+        _unitOfWorkMock.Verify(u => u.CommitAsync(), Times.Once);
+    }
 }
