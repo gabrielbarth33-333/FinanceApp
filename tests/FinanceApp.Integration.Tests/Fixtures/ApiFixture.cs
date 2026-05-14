@@ -54,6 +54,30 @@ public class ApiFixture : WebApplicationFactory<Program>
             new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 
+    public async Task<(int StatusCode, T? Data)> GetAsyncWithStatus<T>(string url) where T : class
+    {
+        var response = await Client.GetAsync(url);
+        var json = await response.Content.ReadAsStringAsync();
+        
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            return ((int)response.StatusCode, null);
+        }
+
+        try
+        {
+            var data = System.Text.Json.JsonSerializer.Deserialize<T>(json,
+                new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            return ((int)response.StatusCode, data);
+        }
+        catch (System.Text.Json.JsonException ex)
+        {
+            throw new InvalidOperationException(
+                $"Erro desserializando resposta. Status: {response.StatusCode}\nResponse: {json}",
+                ex);
+        }
+    }
+
     public async Task<(int StatusCode, T? Data)> PostAsync<T>(string url, object payload) where T : class
     {
         var json = System.Text.Json.JsonSerializer.Serialize(payload);
