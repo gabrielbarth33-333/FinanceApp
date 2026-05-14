@@ -10,5 +10,6 @@
     <Project Path="tests/FinanceApp.Application.Tests/FinanceApp.Application.Tests.csproj" />
     <Project Path="tests/FinanceApp.Domain.Tests/FinanceApp.Domain.Tests.csproj" />
     <Project Path="tests/FinanceApp.Infrastructure.Tests/FinanceApp.Infrastructure.Tests.csproj" />
+    <Project Path="tests/FinanceApp.Integration.Tests/FinanceApp.Integration.Tests.csproj" />
   </Folder>
 </Solution>
