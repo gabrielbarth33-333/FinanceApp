@@ -106,7 +106,6 @@ public class E2EFlowTests : IAsyncLifetime
     public async Task DeveManipularMultiplasCont_Independentemente()
     {
         // Criar 3 contas com transações diferentes
-        var documents = new[] { "11111111111", "22222222222", "33333333333" };
         var accounts = new List<(string Document, decimal InitialBalance)>
         {
             ("11111111111", 1000m),
@@ -335,7 +334,7 @@ public class E2EFlowTests : IAsyncLifetime
 
         decimal totalExpected = 0;
 
-        foreach (var (i, (canonical, variant)) in categoryVariations.Select((x, idx) => (idx, x)))
+        foreach (var (i, (_, variant)) in categoryVariations.Select((x, idx) => (idx, x)))
         {
             var tx = new RegisterTransactionRequest
             {

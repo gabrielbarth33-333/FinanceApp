@@ -319,7 +319,6 @@ public class CategoryACLIntegrationTests : IAsyncLifetime
 
         // Act — Registrar 3 transações com variações de "Alimentação"
         var variations = new[] { "alimentacao", "ALIMENTACAO", "Alimentação" };
-        var transactionIds = new List<Guid>();
 
         foreach (var categoryName in variations)
         {
