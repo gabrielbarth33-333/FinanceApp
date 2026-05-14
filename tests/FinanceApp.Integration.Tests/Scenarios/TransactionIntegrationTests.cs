@@ -402,19 +402,13 @@ public class TransactionIntegrationTests : IAsyncLifetime
         [JsonPropertyName("id")]
         public Guid Id { get; set; }
 
-        [JsonPropertyName("document")]
-        public string Document { get; set; } = null!;
-
         [JsonPropertyName("amount")]
         public MoneyResponse Amount { get; set; } = null!;
 
         [JsonPropertyName("type")]
         public string Type { get; set; } = null!;
 
-        [JsonPropertyName("categoryName")]
-        public string CategoryName { get; set; } = null!;
-
         [JsonPropertyName("registeredAt")]
-        public DateTime RegisteredAt { get; set; }
+        public string RegisteredAt { get; set; } = null!;
     }
 }

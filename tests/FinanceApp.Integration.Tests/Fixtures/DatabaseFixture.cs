@@ -54,13 +54,13 @@ public class DatabaseFixture : IAsyncLifetime, IAsyncDisposable
     public async Task ResetAsync()
     {
         using var context = new FinanceAppDbContext(DbContextOptions);
+        using var connection = context.Database.GetDbConnection();
         
-        var accounts = await context.Accounts.ToListAsync();
-        var transactions = await context.Transactions.ToListAsync();
+        await connection.OpenAsync();
+        using var command = connection.CreateCommand();
         
-        context.Transactions.RemoveRange(transactions);
-        context.Accounts.RemoveRange(accounts);
-        
-        await context.SaveChangesAsync();
+        // Truncate com cascade para limpar tudo
+        command.CommandText = "TRUNCATE TABLE transactions CASCADE; TRUNCATE TABLE accounts CASCADE;";
+        await command.ExecuteNonQueryAsync();
     }
 }
