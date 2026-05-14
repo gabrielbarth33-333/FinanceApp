@@ -61,6 +61,12 @@ public class ApiFixture : WebApplicationFactory<Program>
         var response = await Client.PostAsync(url, content);
         var responseJson = await response.Content.ReadAsStringAsync();
         
+        // Se resposta vazia, retornar apenas status code (ex: 201 Created)
+        if (string.IsNullOrWhiteSpace(responseJson))
+        {
+            return ((int)response.StatusCode, null);
+        }
+
         try
         {
             var data = System.Text.Json.JsonSerializer.Deserialize<T>(responseJson,
