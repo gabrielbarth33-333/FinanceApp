@@ -187,11 +187,12 @@ Entrada: "Saúde" → Encontra: "Saúde" ✓
 dotnet test
 ```
 
-- **47 testes** — 30 de domínio + 17 de aplicação
-- Cobertura: **87.8%** (Domain: 94.6%, Application: 94.7%)
+- **55 testes** — 38 de domínio + 17 de aplicação
+- Cobertura de linhas: **94.4%** | Branch: **92.3%** | Métodos: **92.1%**
+  - Domain: **94.1%** | Application: **95.0%** | Catalog: **92.3%**
 - Nomenclatura em português: `Deve[Resultado]_Quando[Condição]`
 - Framework: xUnit + Moq + FluentAssertions
-- Testes para sanitização de documento e busca case-insensitiva de categorias incluídos
+- Testes para sanitização de documento, busca case-insensitiva de categorias e validações do Catalog Context incluídos
 
 ---
 
