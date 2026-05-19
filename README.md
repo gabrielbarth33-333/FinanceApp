@@ -108,6 +108,22 @@ Entrada: "12.345.678/0001-90" → Armazenado: "12345678000190"
 Busca por "123.456.789-00" encontra documento armazenado como "12345678900" ✓
 ```
 
+### Validação de período de transações
+
+- **Períodos aninhados** — data de início nunca pode ser posterior a data de fim
+- **Limite de 1 ano** — períodos maiores que 365 dias são rejeitados
+- Ambas as regras lançam exceções de domínio específicas (não `ArgumentException`)
+  - `InvalidTransactionPeriodException` — datas inválidas
+  - `TransactionPeriodTooLargeException` — período excede 1 ano
+- Validação ocorre no `ListTransactionsUseCase` antes de consultar o repositório
+
+**Exemplos:**
+```
+Período: 2024-03-10 a 2024-02-10 → InvalidTransactionPeriodException ✓
+Período: 2023-01-01 a 2024-02-01 → TransactionPeriodTooLargeException ✓
+Período: 2024-01-01 a 2024-06-01 → Aceito (180 dias) ✓
+```
+
 ### Busca de categorias — case e diacrítico-insensível
 
 - PostgreSQL `unaccent()` + `LOWER()` para ignorar case e acentuação
@@ -166,6 +182,10 @@ Entrada: "Saúde" → Encontra: "Saúde" ✓
 | `startDate` | `date` | Início do período (padrão: 1 mês atrás) |
 | `endDate` | `date` | Fim do período (padrão: hoje) |
 
+**Validações:**
+- Data de início **não pode ser posterior** a data de fim (lança `InvalidTransactionPeriodException`)
+- Período máximo permitido é de **1 ano** (lança `TransactionPeriodTooLargeException`)
+
 #### Resposta de transações
 
 ```json
@@ -187,11 +207,11 @@ Entrada: "Saúde" → Encontra: "Saúde" ✓
 dotnet test
 ```
 
-- **47 testes** — 30 de domínio + 17 de aplicação
+- **49 testes** — 30 de domínio + 19 de aplicação
 - Cobertura: **87.8%** (Domain: 94.6%, Application: 94.7%)
 - Nomenclatura em português: `Deve[Resultado]_Quando[Condição]`
 - Framework: xUnit + Moq + FluentAssertions
-- Testes para sanitização de documento e busca case-insensitiva de categorias incluídos
+- Testes para sanitização de documento, busca case-insensitiva de categorias e validação de período incluídos
 
 ---
 
