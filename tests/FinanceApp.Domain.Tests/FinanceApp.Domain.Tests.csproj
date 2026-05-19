@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\FinanceApp.Domain\FinanceApp.Domain.csproj" />
-    <ProjectReference Include="..\..\src\FinanceApp.Catalog\FinanceApp.Catalog.csproj" />
   </ItemGroup>
 
 </Project>

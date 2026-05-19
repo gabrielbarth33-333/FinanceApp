@@ -137,4 +137,41 @@ public class ListTransactionsUseCaseTests
         result.NetBalance.Should().Be(0);
         result.Transactions.Should().BeEmpty();
     }
+
+    [Fact]
+    public async Task DeveLancarExcecao_QuandoDataDeInicioForPosteriorADataDeFim()
+    {
+        // Arrange
+        var accountId = Guid.NewGuid();
+        var account = new AccountEntity(accountId, "João", new Document(Document), new Money(100m));
+        var startWithTime = new DateTime(2024, 3, 10, 15, 30, 0);
+        var endWithTime = new DateTime(2024, 2, 10, 23, 59, 59);
+
+        _accountRepoMock.Setup(r => r.GetByDocument(Document)).ReturnsAsync(account);
+
+        // Act
+        var act = async () => await _useCase.ExecuteAsync(Document, startWithTime, endWithTime);
+
+        // Assert
+        await act.Should().ThrowAsync<InvalidTransactionPeriodException>()
+            .WithMessage("Data de início deve ser anterior à data de fim.");
+    }
+
+    [Fact]
+    public async Task DeveLancarExcecao_QuandoPeriodoForMaiorQueUmAno()
+    {
+        // Arrange
+        var accountId = Guid.NewGuid();
+        var account = new AccountEntity(accountId, "João", new Document(Document), new Money(100m));
+        var startWithTime = new DateTime(2023, 1, 1);
+        var endWithTime = new DateTime(2024, 2, 1);
+
+        _accountRepoMock.Setup(r => r.GetByDocument(Document)).ReturnsAsync(account);
+
+        // Act
+        var act = async () => await _useCase.ExecuteAsync(Document, startWithTime, endWithTime);
+
+        // Assert
+        await act.Should().ThrowAsync<TransactionPeriodTooLargeException>();
+    }
 }

@@ -26,6 +26,14 @@ public class ListTransactionsUseCase(
         var start = DateTime.SpecifyKind(startDate?.Date ?? DateTime.UtcNow.Date.AddMonths(-1), DateTimeKind.Utc);
         var end = DateTime.SpecifyKind((endDate?.Date ?? DateTime.UtcNow.Date).AddDays(1).AddTicks(-1), DateTimeKind.Utc);
 
+        // Valida se a data de inicio é posterior a data de fim
+        if (start > end)
+            throw new InvalidTransactionPeriodException("Data de início deve ser anterior à data de fim.");
+
+        // Valida se o período solicitado é maior que 1 ano
+        if (end - start > TimeSpan.FromDays(365))
+            throw new TransactionPeriodTooLargeException();
+
         var transactions = await transactionRepository.ListByAccountIdAndPeriod(account.Id, start, end);
 
         var totalIncome = transactions
