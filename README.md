@@ -34,6 +34,12 @@ Sistema de controle financeiro pessoal desenvolvido com **C# 13 / .NET 10**, seg
 
 ---
 
+## Modelo do domínio
+
+<img width="1962" height="1031" alt="Image" src="https://github.com/user-attachments/assets/36f3af2d-0026-4ad9-b435-77b8d840d807" />
+
+---
+
 ## Arquitetura
 
 O projeto é dividido em dois **Bounded Contexts**:
